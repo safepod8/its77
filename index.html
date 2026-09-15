@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nova Arcade</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:'Segoe UI', system-ui, sans-serif;
+    background:#0b0e14; color:#e8ecf4; min-height:100vh;
+  }
+
+  header {
+    padding:24px; text-align:center;
+    background:linear-gradient(120deg,#7c5cff33,#00d4ff22);
+    border-bottom:1px solid #262d40;
+  }
+  header h1 { font-size:1.8rem; }
+  header p { color:#8b93a7; margin-top:6px; }
+
+  .grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
+    gap:16px;
+    max-width:1000px;
+    margin:30px auto;
+    padding:0 20px;
+  }
+
+  .card {
+    background:#141824; border:1px solid #262d40;
+    border-radius:14px; overflow:hidden; cursor:pointer;
+    transition:transform .18s, border-color .18s;
+  }
+  .card:hover { transform:translateY(-4px); border-color:#7c5cff; }
+  .card .thumb {
+    height:110px; display:flex; align-items:center; justify-content:center;
+    font-size:3rem; background:#1c2233;
+  }
+  .card .info { padding:12px 14px; }
+  .card .title { font-weight:600; }
+  .card .meta { font-size:.75rem; color:#8b93a7; margin-top:2px; }
+  .badge {
+    position:absolute; margin:10px; padding:3px 8px;
+    font-size:.65rem; font-weight:700; border-radius:20px;
+    background:#00d4ff; color:#06202a;
+  }
+
+  /* fullscreen game view */
+  #player { display:none; position:fixed; inset:0; background:#000; z-index:10; }
+  #player iframe { width:100%; height:100%; border:none; }
+  #player .bar {
+    position:absolute; top:0; left:0; right:0;
+    display:flex; align-items:center; gap:10px; padding:10px 14px;
+    background:#141824dd; backdrop-filter:blur(6px);
+  }
+  #player .bar .title { flex:1; font-weight:600; }
+  .btn {
+    background:#1c2233; border:1px solid #262d40; color:#e8ecf4;
+    padding:8px 14px; border-radius:10px; cursor:pointer; font-size:.85rem;
+  }
+  .btn:hover { background:#7c5cff; }
+
+  footer {
+    text-align:center; padding:20px; color:#8b93a7; font-size:.8rem;
+    border-top:1px solid #262d40;
+  }
+  footer a { color:#00d4ff; text-decoration:none; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎮 Nova Arcade</h1>
+  <p>Free games, play instantly in your browser</p>
+</header>
+
+<div class="grid" id="grid"></div>
+
+<footer>
+  Inspired by <a href="https://qag77.gitlab.io/qag77" target="_blank">QAG77</a>
+  by <a href="https://github.com/Gamerboss3094" target="_blank">Gamerboss3094</a>.
+</footer>
+
+<!-- fullscreen game player -->
+<div id="player">
+  <div class="bar">
+    <div class="title" id="player-title"></div>
+    <button class="btn" onclick="closeGame()">✕ Close</button>
+  </div>
+  <iframe id="frame" allowfullscreen></iframe>
+</div>
+
+<script>
+// ===================== GAMES LIST =====================
+// To add a game: add a line like the ones below and put its files
+// in games/<folder-name>/ with an index.html inside.
+const GAMES = [
+  { title:'n-gon',        emoji:'⬡', url:'games/ngon/index.html',      tag:'Action',  isNew:false },
+  { title:'Bit Planes',   emoji:'✈️', url:'games/bit-planes/index.html', tag:'Multiplayer', isNew:true },
+  { title:'Drive Mad',    emoji:'🚗', url:'games/drive-mad/index.html',  tag:'Driving', isNew:true },
+  { title:'Ragdoll Archers', emoji:'🏹', url:'games/ragdoll-archers/index.html', tag:'Physics', isNew:true }
+];
+
+// ===================== CODE (no need to edit below) =====================
+const grid = document.getElementById('grid');
+grid.innerHTML = GAMES.map((g, i) => `
+  <div class="card" style="position:relative" onclick="openGame(${i})">
+    ${g.isNew ? '<span class="badge">NEW</span>' : ''}
+    <div class="thumb">${g.emoji}</div>
+    <div class="info">
+      <div class="title">${g.title}</div>
+      <div class="meta">${g.tag}</div>
+    </div>
+  </div>`).join('');
+
+function openGame(i) {
+  document.getElementById('player-title').textContent = GAMES[i].title;
+  document.getElementById('frame').src = GAMES[i].url;
+  document.getElementById('player').style.display = 'block';
+}
+function closeGame() {
+  document.getElementById('frame').src = 'about:blank';
+  document.getElementById('player').style.display = 'none';
+}
+</script>
+</body>
+</html>
