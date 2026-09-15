@@ -3,83 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nova Arcade</title>
+<title>its77</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
+
+  :root {
+    --bg:#0b0e14; --panel:#141824; --panel-2:#1c2233; --border:#262d40;
+    --accent:#7c5cff; --text:#e8ecf4; --muted:#8b93a7;
+  }
+
   body {
     font-family:'Segoe UI', system-ui, sans-serif;
-    background:#0b0e14; color:#e8ecf4; min-height:100vh;
+    background:var(--bg); color:var(--text); min-height:100vh;
   }
 
   header {
-    padding:24px; text-align:center;
-    background:linear-gradient(120deg,#7c5cff33,#00d4ff22);
-    border-bottom:1px solid #262d40;
+    display:flex; align-items:center; gap:14px;
+    padding:16px 24px;
+    background:var(--panel); border-bottom:1px solid var(--border);
   }
-  header h1 { font-size:1.8rem; }
-  header p { color:#8b93a7; margin-top:6px; }
+  header .logo {
+    font-size:1.3rem; font-weight:700; letter-spacing:.5px;
+  }
+  header .logo span { color:var(--accent); }
+  header .spacer { flex:1; }
+
+  .btn {
+    background:var(--panel-2); border:1px solid var(--border); color:var(--text);
+    padding:9px 16px; border-radius:10px; cursor:pointer; font-size:.85rem;
+    transition:background .15s, border-color .15s;
+  }
+  .btn:hover { background:var(--accent); border-color:var(--accent); }
+  .btn.primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .btn.primary:hover { background:#6a4be0; }
+
+  .hero {
+    max-width:1000px; margin:34px auto 0; padding:0 20px;
+  }
+  .hero h2 { font-size:1.5rem; }
+  .hero p { color:var(--muted); margin-top:6px; }
 
   .grid {
     display:grid;
     grid-template-columns:repeat(auto-fill, minmax(200px, 1fr));
     gap:16px;
     max-width:1000px;
-    margin:30px auto;
-    padding:0 20px;
+    margin:26px auto;
+    padding:0 20px 40px;
   }
 
   .card {
-    background:#141824; border:1px solid #262d40;
+    background:var(--panel); border:1px solid var(--border);
     border-radius:14px; overflow:hidden; cursor:pointer;
-    transition:transform .18s, border-color .18s;
+    transition:transform .18s, border-color .18s, box-shadow .18s;
+    position:relative;
   }
-  .card:hover { transform:translateY(-4px); border-color:#7c5cff; }
+  .card:hover {
+    transform:translateY(-4px); border-color:var(--accent);
+    box-shadow:0 10px 26px rgba(0,0,0,.45);
+  }
   .card .thumb {
     height:110px; display:flex; align-items:center; justify-content:center;
-    font-size:3rem; background:#1c2233;
+    background:linear-gradient(135deg, var(--panel-2), var(--panel));
+    font-size:2rem; font-weight:800; color:var(--accent);
   }
-  .card .info { padding:12px 14px; }
-  .card .title { font-weight:600; }
-  .card .meta { font-size:.75rem; color:#8b93a7; margin-top:2px; }
-  .badge {
-    position:absolute; margin:10px; padding:3px 8px;
-    font-size:.65rem; font-weight:700; border-radius:20px;
-    background:#00d4ff; color:#06202a;
+  .card .info { padding:12px 14px 14px; }
+  .card .title { font-weight:600; font-size:.95rem; }
+  .card .meta { font-size:.75rem; color:var(--muted); margin-top:2px; }
+  .card .badge {
+    position:absolute; top:10px; right:10px;
+    font-size:.65rem; font-weight:700; padding:3px 9px; border-radius:20px;
+    background:var(--accent); color:#fff; letter-spacing:.5px;
   }
 
-  /* fullscreen game view */
+  footer {
+    text-align:center; padding:20px; color:var(--muted); font-size:.8rem;
+    border-top:1px solid var(--border);
+  }
+  footer a { color:var(--accent); text-decoration:none; }
+
+  /* fullscreen game player */
   #player { display:none; position:fixed; inset:0; background:#000; z-index:10; }
   #player iframe { width:100%; height:100%; border:none; }
   #player .bar {
     position:absolute; top:0; left:0; right:0;
     display:flex; align-items:center; gap:10px; padding:10px 14px;
-    background:#141824dd; backdrop-filter:blur(6px);
+    background:rgba(20,24,36,.85); backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--border);
   }
   #player .bar .title { flex:1; font-weight:600; }
-  .btn {
-    background:#1c2233; border:1px solid #262d40; color:#e8ecf4;
-    padding:8px 14px; border-radius:10px; cursor:pointer; font-size:.85rem;
-  }
-  .btn:hover { background:#7c5cff; }
-
-  footer {
-    text-align:center; padding:20px; color:#8b93a7; font-size:.8rem;
-    border-top:1px solid #262d40;
-  }
-  footer a { color:#00d4ff; text-decoration:none; }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>🎮 Nova Arcade</h1>
-  <p>Free games, play instantly in your browser</p>
+  <div class="logo">its<span>77</span></div>
+  <div class="spacer"></div>
+  <button class="btn" onclick="openCloak()">about:blank</button>
 </header>
+
+<div class="hero">
+  <h2>Play instantly</h2>
+  <p>No downloads, no sign in. Click a game and play.</p>
+</div>
 
 <div class="grid" id="grid"></div>
 
 <footer>
-  Inspired by <a href="https://qag77.gitlab.io/qag77" target="_blank">QAG77</a>
+  Remake inspired by <a href="https://qag77.gitlab.io/qag77" target="_blank">QAG77</a>
   by <a href="https://github.com/Gamerboss3094" target="_blank">Gamerboss3094</a>.
 </footer>
 
@@ -87,42 +118,55 @@
 <div id="player">
   <div class="bar">
     <div class="title" id="player-title"></div>
-    <button class="btn" onclick="closeGame()">✕ Close</button>
+    <button class="btn" onclick="closeGame()">Close</button>
   </div>
   <iframe id="frame" allowfullscreen></iframe>
 </div>
 
 <script>
 // ===================== GAMES LIST =====================
-// To add a game: add a line like the ones below and put its files
-// in games/<folder-name>/ with an index.html inside.
+// name: shown on the card
+// letter: the big letter on the tile (replaced by image later)
+// color: tile background
+// url: path to the game folder's index.html
 const GAMES = [
-  { title:'n-gon',        emoji:'⬡', url:'games/ngon/index.html',      tag:'Action',  isNew:false },
-  { title:'Bit Planes',   emoji:'✈️', url:'games/bit-planes/index.html', tag:'Multiplayer', isNew:true },
-  { title:'Drive Mad',    emoji:'🚗', url:'games/drive-mad/index.html',  tag:'Driving', isNew:true },
-  { title:'Ragdoll Archers', emoji:'🏹', url:'games/ragdoll-archers/index.html', tag:'Physics', isNew:true }
+  { name:'n-gon',           letter:'N', color:'#1c2233', url:'games/ngon/index.html',           tag:'Action',      isNew:false },
+  { name:'Bit Planes',      letter:'B', color:'#152a3d', url:'games/bit-planes/index.html',     tag:'Multiplayer', isNew:true },
+  { name:'Drive Mad',       letter:'D', color:'#3d2515', url:'games/drive-mad/index.html',      tag:'Driving',     isNew:true },
+  { name:'Ragdoll Archers', letter:'R', color:'#23301d', url:'games/ragdoll-archers/index.html',tag:'Physics',     isNew:true }
 ];
 
 // ===================== CODE (no need to edit below) =====================
 const grid = document.getElementById('grid');
 grid.innerHTML = GAMES.map((g, i) => `
-  <div class="card" style="position:relative" onclick="openGame(${i})">
+  <div class="card" onclick="openGame(${i})">
     ${g.isNew ? '<span class="badge">NEW</span>' : ''}
-    <div class="thumb">${g.emoji}</div>
+    <div class="thumb" style="color:${g.color === '#1c2233' ? '' : 'inherit'}; background:${g.color}22">${g.letter}</div>
     <div class="info">
-      <div class="title">${g.title}</div>
+      <div class="title">${g.name}</div>
       <div class="meta">${g.tag}</div>
     </div>
   </div>`).join('');
 
 function openGame(i) {
-  document.getElementById('player-title').textContent = GAMES[i].title;
+  document.getElementById('player-title').textContent = GAMES[i].name;
   document.getElementById('frame').src = GAMES[i].url;
   document.getElementById('player').style.display = 'block';
 }
 function closeGame() {
   document.getElementById('frame').src = 'about:blank';
   document.getElementById('player').style.display = 'none';
+}
+
+// about:blank launcher — opens a blank tab and embeds the site inside it
+function openCloak() {
+  const url = location.href;
+  const win = window.open('about:blank', '_blank');
+  if (!win) { alert('Popup blocked — allow popups for this site.'); return; }
+  win.document.write(
+    '<iframe src="' + url + '" style="border:none;position:fixed;inset:0;width:100%;height:100%"></iframe>'
+  );
+  win.document.title = 'about:blank';
 }
 </script>
 </body>
